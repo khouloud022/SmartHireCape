@@ -17,6 +17,8 @@ import AnalyseCandidatures from './AnalyseCandidatures';
 import Editprofilerec from './Editprofilerec';
 import Editprofilecand from './Editprofilecand';
 import keycloak from './keycloak';
+import Preselection from './Preselection';
+import Messoumissions from './Messoumissions';
 
 function App() {
 
@@ -53,6 +55,8 @@ function App() {
         <Route path="/Listoffrecand" element={<Listoffrecand />} />
         <Route path="/Listcandidats" element={<Listecandidats />} />
         <Route path="/AnalyseCandidatures" element={<AnalyseCandidatures />} />
+        <Route path="/Preselection" element={<Preselection />} />
+        <Route path="/Messoumissions" element={<Messoumissions />} />
         <Route path="/Editprofilerec" element={<Editprofilerec />} />
         <Route path="/Editprofilecand" element={<Editprofilecand />} />
         <Route path="/Footer" element={<Footer />} />

@@ -14,6 +14,8 @@ const OffreEmploiForm = () => {
     entreprise: '',
     description: '',
     competences: '',
+    Hardskills: '',
+    minexperience: '',
     salaire: '',
     dateLimite: '',
     missions: '',
@@ -45,6 +47,8 @@ const OffreEmploiForm = () => {
           entreprise: '',
           description: '',
           competences: '',
+          Hardskills: '',
+          minexperience: '',
           salaire: '',
           dateLimite: '',
           missions: '',
@@ -151,9 +155,14 @@ const OffreEmploiForm = () => {
                   <FloatingLabel controlId="competences" label="Compétences requises *" className="mb-3">
                     <Form.Control as="textarea" required name="competences" value={offre.competences} onChange={handleChange} style={{ height: '150px' }} />
                   </FloatingLabel>
-
+                   <FloatingLabel controlId="Hardskills" label="Outils à maitriser *" className="mb-4">
+                    <Form.Control as="textarea" required name="Hardskills" value={offre.Hardskills} onChange={handleChange}  />
+                  </FloatingLabel>
                   <FloatingLabel controlId="missions" label="Missions principales *" className="mb-3">
                     <Form.Control as="textarea" required name="missions" value={offre.missions} onChange={handleChange} style={{ height: '150px' }} />
+                  </FloatingLabel>
+                   <FloatingLabel controlId="minexperience" label="Minimum d'années d'expérience *" className="mb-4">
+                    <Form.Control as="textarea" required name="minexperience" value={offre.minexperience} onChange={handleChange}  />
                   </FloatingLabel>
 
                   <FloatingLabel controlId="salaire" label="Salaire (confidentiel)" className="mb-4">

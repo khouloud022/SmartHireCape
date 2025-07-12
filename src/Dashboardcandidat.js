@@ -10,6 +10,7 @@ import HeaderAndSidebarcand from './HeaderAndSidebarcand'
 
 function App() {
   const [nombreOffres, setNombreOffres] = useState(0);
+  const [soumissionCount,  setSoumissionCount] = useState(0);
   const [nombreCandidats, setNombreCandidats] = useState(0);
   const [offresAssignees, setOffresAssignees] = useState(0);
   const [candidats, setCandidats] = useState([]);
@@ -45,6 +46,21 @@ function App() {
         setError("Erreur lors du chargement des offres");
         setLoading(false);
       });
+
+      if (keycloak.authenticated) {
+    const email = keycloak.tokenParsed?.email;
+
+    axios
+      .get("http://localhost:8085/api/candidatures/by-email", {
+        params: { email },
+      })
+      .then((res) => {
+        setSoumissionCount(res.data.length); 
+      })
+      .catch((err) => {
+        console.error("Erreur:", err);
+      });
+  }
   
     
   }, []);
@@ -93,7 +109,7 @@ function App() {
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
                         <Card.Title className="text-muted small text-uppercase fw-bold">Soumissions</Card.Title>
-                        <h2 className="mb-0 text-dark">{}</h2>
+                        <h2 className="mb-0 text-dark">{soumissionCount}</h2>
                       </div>
                       <div className="p-3 rounded" style={{backgroundColor: 'rgba(42, 91, 215, 0.1)'}}>
                         <i className="fas fa-users fa-2x" style={{color: '#2a5bd7'}}></i>

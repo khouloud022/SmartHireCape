@@ -9,6 +9,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import InterfaceRecruteur from './Dashboard';
 import InterfaceCandidat from './Dashboardcandidat';
 import Accueil from './Accueil';
+import App from './App';
 
 import keycloak from './keycloak';
 

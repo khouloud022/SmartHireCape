@@ -27,40 +27,50 @@ const AnalyseCandidatures = () => {
     }
   };
 
-  const handleAnalyse = async (candidature) => {
-    setLoadingId(candidature.id);
+ const handleAnalyse = async (candidature) => {
+  setLoadingId(candidature.id);
 
-   try {
-  const response = await fetch(`${process.env.REACT_APP_API_BASE_URL_ANALYSE}/analyse`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      poste: candidature.offre?.titre || "",
-      cvUrl: `http://localhost:8085/cv/${candidature.cvpath.replace(/\\/g, "/")}`,
-    }),
-  });
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL_ANALYSE}/analyse`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        poste: candidature.offre?.titre || "",
+        cvUrl: `http://localhost:8085/cv/${candidature.cvpath.replace(/\\/g, "/")}`,
+      }),
+    });
 
-  const result = await response.json();
-  const matchingScore = result.score;
-  const etat = matchingScore >= 60 ? "Préselectionné" : "Rejeté";
+    const result = await response.json();
 
-  setMessages((prev) => ({
-    ...prev,
-    [candidature.id]: {
-      score: matchingScore,
-      status: etat,
-      message: `Score: ${matchingScore}/100 — ${etat}`,
-    },
-  }));
-} catch (err) {
-  console.error("Erreur analyse du CV :", err);
-}
+    if (!response.ok) {
+      throw new Error(result.error || "Erreur inconnue côté serveur.");
+    }
 
+    const matchingScore = result.score;
+    const etat = matchingScore >= 60 ? "Préselectionné" : "Rejeté";
 
-    setLoadingId(null);
-  };
+    setMessages((prev) => ({
+      ...prev,
+      [candidature.id]: {
+        score: matchingScore,
+        status: etat,
+        message: `Score: ${matchingScore}/100 — ${etat}`,
+      },
+    }));
+  } catch (err) {
+    console.error("Erreur analyse du CV :", err);
+    setMessages((prev) => ({
+      ...prev,
+      [candidature.id]: {
+        score: 0,
+        status: "Erreur",
+        message: "Erreur lors de l’analyse du CV.",
+      },
+    }));
+  }
+
+  setLoadingId(null);
+};
 
   const filteredCandidatures = candidatures.filter(cand => {
     if (activeFilter === "tous") return true;
@@ -70,10 +80,10 @@ const AnalyseCandidatures = () => {
   });
 
   return (
-    <div className="analyse-candidatures-page">
+    <div className="analyse-candidatures-page" >
       <HeaderAndSidebar />
       <br></br> <br></br>
-      <Container fluid className="main-content">
+      <Container fluid className="main-content" style={{marginLeft:'300px'}}>
         <div className="page-header">
           <h1>  Analyse des Candidatures</h1>
           <div className="filter-buttons">

@@ -51,7 +51,7 @@ function App( { authenticated, keycloak }) {
       id: candidat.id,
       nom: `${candidat.nomComplet}`,
       poste: candidat.offre?.titre || "Non spécifié",
-      statut: candidat.statut || "En attente",
+      statut: candidat.etat || "En attente",
       date: candidat.dateSoumission ? new Date(candidat.dateSoumission).toLocaleDateString() : "—",
       score: candidat.score || 0
     }));
@@ -167,7 +167,7 @@ function App( { authenticated, keycloak }) {
                 <Card className="mb-4 border-0 shadow-sm" style={{borderRadius: '12px'}}>
                   <Card.Header className="bg-white border-0">
                     <div className="d-flex justify-content-between align-items-center">
-                      <h5 className="mb-0 text-dark">Dernières offres publiées</h5>
+                      <h4 className="mb-0 text-dark">Dernières offres publiées</h4>
                       <Link to="/Listoffre" style={{ textDecoration: 'none', color: 'inherit' }}>
                       <Button variant="outline-primary" size="sm" style={{color: '#2a5bd7',borderColor: '#2a5bd7'}}>
                         Voir tout
@@ -178,7 +178,7 @@ function App( { authenticated, keycloak }) {
                   <Card.Body>
   <div className="table-responsive">
       <Table hover className="mb-0">
-        <thead className="bg-light">
+        <thead className="bg-light" style={{fontSize:'15px'}}>
           <tr>
             <th className="border-0">Poste</th>
             <th className="border-0">Type</th>
@@ -197,13 +197,8 @@ function App( { authenticated, keycloak }) {
                 <td>{offre.entreprise}</td>
                 <td>{offre.dateLimite ? new Date(offre.dateLimite).toLocaleDateString() : '—'}</td>
                 <td>{renderStatutBadge(offre.etat)}</td>
-                <td>
-                  <Button variant="outline-primary" size="sm" className="me-1 border-0">
-                    <i className="fas fa-eye text-primary"></i>
-                  </Button>
-                  <Button variant="outline-success" size="sm" className="border-0">
-                    <i className="fas fa-edit text-success"></i>
-                  </Button>
+                <td><Button variant="outline-primary" size="sm" className="me-1 border-0"><i className="fas fa-eye text-primary"></i> </Button>
+                    <Button variant="outline-success" size="sm" className="border-0"><i className="fas fa-edit text-success"></i> </Button>
                 </td>
               </tr>
             ))
@@ -323,13 +318,13 @@ function App( { authenticated, keycloak }) {
                               <td>
                                 <Badge 
                                   bg={
-                                    candidat.statut === "Accepté" ? "success" : 
-                                    candidat.statut === "En revue" ? "warning" : "secondary"
+                                    candidat.statut === "Accepté(e) en phase de préselection" ? "success" : 
+                                    candidat.statut === "rejeté(e)" ? "warning" : "secondary"
                                   }
                                   style={{
-                                    backgroundColor: candidat.statut === "Accepté" ? '#28a745' : 
-                                                   candidat.statut === "En revue" ? '#ffc107' : '#6c757d',
-                                    color: candidat.statut === "En revue" ? '#212529' : 'white'
+                                    backgroundColor: candidat.statut === "Accepté(e) en phase de préselection" ? '#28a745' : 
+                                    candidat.statut === "rejeté(e)" ? '#ffc107' : '#6c757d',
+                                    color: candidat.statut === "rejeté(e)" ? '#212529' : 'white'
                                   }}
                                 >
                                   {candidat.statut}

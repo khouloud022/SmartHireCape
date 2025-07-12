@@ -13,10 +13,10 @@ const HeaderAndSidebar = () => {
       }}>
         <div className="p-4" style={{ borderBottom: '1px solid #f0f0f0' }}>
           <Col md={5} className="d-none d-md-block">
-          <Image src="../logo1.png" alt="Illustration offre d'emploi" fluid style={{ borderRadius: '10px' }} />
+          <Image src="../logo1.png" alt="Illustration offre d'emploi" fluid style={{ borderRadius: '10px',marginLeft:'32px' }} />
         </Col>
           <h5 className="mb-0 text-primary">
-            <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'inherit',fontSize:'25px' }}>
             <span>
               <span style={{ color: 'rgb(0, 125, 175)' }}>Sma</span>
               <span style={{ color: '#E63946' }}>rt</span>
@@ -28,26 +28,29 @@ const HeaderAndSidebar = () => {
               </Link>
           </h5>
         </div>
-        <ListGroup variant="flush" className="mt-3" style={{ fontSize: '1.1rem' }}>
-          <ListGroup.Item as={Link} to="/Dashboard" action active className="border-0">
+        <ListGroup variant="flush" className="mt-3" style={{ fontSize: '20px' }}>
+          <ListGroup.Item as={Link} to="/Dashboard" action active className="border-0 mb-3">
             <i className="fas fa-tachometer-alt me-2"></i> Tableau de bord
           </ListGroup.Item>
-          <ListGroup.Item as={Link} to="/Listcandidats" action className="border-0 text-dark hover-bg-light">
+          <ListGroup.Item as={Link} to="/Listcandidats" action className="border-0 mb-3 text-dark hover-bg-light">
             <i className="fas fa-users me-2"></i> Candidats
           </ListGroup.Item>
-          <ListGroup.Item as={Link} to="/Publieroffre" action className="border-0 text-dark hover-bg-light">
+          <ListGroup.Item as={Link} to="/Publieroffre" action className="border-0 mb-3 text-dark hover-bg-light">
             <i className="fas fa-file-alt me-2"></i> Publier une offre
           </ListGroup.Item>
-          <ListGroup.Item as={Link} to="/AnalyseCandidatures" action className="border-0 text-dark hover-bg-light">
+          <ListGroup.Item as={Link} to="/Preselection" action className="border-0 mb-3 text-dark hover-bg-light">
+                             <i className="fas fa-users me-2"></i> Phase de préselection 
+                           </ListGroup.Item>
+          <ListGroup.Item as={Link} to="/AnalyseCandidatures" action className="border-0 mb-3 text-dark hover-bg-light">
             <i className="fas fa-chart-line me-2"></i> Analyse des candidatures
           </ListGroup.Item>
-          <ListGroup.Item action className="border-0 text-dark hover-bg-light">
+          <ListGroup.Item action className="border-0 mb-3 text-dark hover-bg-light">
             <i className="fas fa-calendar-alt me-2"></i> Entretiens
           </ListGroup.Item>
-          <ListGroup.Item action className="border-0 text-dark hover-bg-light">
+          <ListGroup.Item action className="border-0 mb-3 text-dark hover-bg-light">
             <i className="fas fa-cog me-2"></i> Paramètres
           </ListGroup.Item>
-          <ListGroup.Item href='https://www.whitecapetech.com/contact' action className="border-0 text-dark hover-bg-light">
+          <ListGroup.Item href='https://www.whitecapetech.com/contact' action className="border-0 mb-3 text-dark hover-bg-light">
             <i className="fas fa-question-circle me-2"></i> Aide
           </ListGroup.Item>
         </ListGroup>
@@ -55,7 +58,7 @@ const HeaderAndSidebar = () => {
 
       <Navbar expand="lg" className="fixed-top shadow-sm bg-white" style={{
         left: '280px',
-        right: 0,
+        right: 0, fontSize:'20px',
         borderBottom: '1px solid #eaeaea'
       }}>
         <Container fluid>

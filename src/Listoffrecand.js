@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import HeaderWithSidebarcand from "./HeaderAndSidebarcand";
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Chip, Box, IconButton } from "@mui/material";
+import HeaderWithSidebar from "./HeaderAndSidebarcand";
+import { Container, Typography, Paper, Button, Chip, Box, IconButton,Grid,Card,CardContent,CardActions,Avatar, Divider} from "@mui/material";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import WorkIcon from '@mui/icons-material/Work';
+import BusinessIcon from '@mui/icons-material/Business';
+import EventIcon from '@mui/icons-material/Event';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CodeIcon from '@mui/icons-material/Code';
 
 function ListeOffres() {
   const [offres, setOffres] = useState([]);
@@ -16,7 +21,6 @@ function ListeOffres() {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_BASE_URL}/offres`)
       .then(response => {
-       
         const offresAvecEtat = response.data.map(offre => ({
           ...offre,
           etat: offre.etat || "En cours"
@@ -63,7 +67,6 @@ function ListeOffres() {
   if (error) return <Typography color="error">{error}</Typography>;
   if (offres.length === 0) return <Typography>Aucune offre disponible</Typography>;
 
-
   const getEtatColor = (etat) => {
     switch(etat) {
       case 'Assignée': return 'success';
@@ -74,58 +77,76 @@ function ListeOffres() {
 
   return (
     <div className="App">
-      <HeaderWithSidebarcand />
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ 
-          fontWeight: 'bold', 
-          color: 'primary.main',
-          mb: 4,
-          textAlign: 'center'
-        }}>
-          <br></br>
-          Offres d'Emploi Disponibles
-        </Typography>
-        
-        <TableContainer component={Paper} elevation={3}>
-          <Table sx={{ minWidth: 650 }} aria-label="tableau des offres">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: 'primary.main' }}>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Titre</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Entreprise</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Type de contrat</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>État</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Date limite</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Compétences</TableCell>
-                 <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Missions</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {offres.map((offre) => (
-                <TableRow key={offre.id} hover>
-                  <TableCell sx={{ fontWeight: 'bold' }}>{offre.titre}</TableCell>
-                  <TableCell>{offre.entreprise}</TableCell>
-                  <TableCell>
+      <HeaderWithSidebar />
+      
+      <Container maxWidth="lg" sx={{ py: 7 }}>
+        <Box sx={{ position: 'relative', mb: 6,borderRadius: 2,overflow: 'hidden',height: '200px'}}>
+          <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Offres d'emploi" style={{ width: '100%', height: '100%', objectFit: 'cover',filter: 'brightness(0.7)'}}/>
+          <Typography variant="h3" component="h1" sx={{position: 'absolute',bottom: 0,left: 0,p: 3,color: 'white',fontWeight: 'bold',textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+            Offres d'Emploi Disponibles
+          </Typography>
+        </Box>
+
+        <Grid container spacing={3}>
+          {offres.map((offre) => (
+            <Grid item xs={12} md={6} lg={4} key={offre.id}>
+              <Card elevation={3}
+                sx={{height: '100%',display: 'flex',flexDirection: 'column',transition: 'transform 0.3s','&:hover': {transform: 'translateY(-5px)'}}}>
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                      <WorkIcon />
+                    </Avatar>
+                    <Typography variant="h5" component="h3" sx={{ fontWeight: 'bold' }}>
+                      {offre.titre}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <BusinessIcon color="action" sx={{ mr: 1 }} />
+                    <Typography variant="body1">{offre.entreprise}</Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <EventIcon color="action" sx={{ mr: 1 }} />
+                    <Typography variant="body1">
+                      {format(new Date(offre.dateLimite), 'PPP', { locale: fr })}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ mb: 2 }}>
                     <Chip 
                       label={offre.typeContrat} 
                       color="primary" 
                       variant="outlined"
                       size="small"
+                      sx={{ mr: 1 }}
                     />
-                  </TableCell>
-                  <TableCell>
                     <Chip 
                       label={offre.etat} 
                       color={getEtatColor(offre.etat)}
                       variant="filled"
                       size="small"
                     />
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(offre.dateLimite), 'PPP', { locale: fr })}
-                    
-                  </TableCell>
-                  <TableCell>
+                  </Box>
+
+                  <Divider sx={{ my: 2 }} />
+
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <AssignmentIcon color="action" sx={{ mr: 1 }} />
+                      Missions
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {offre.missions}
+                    </Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                      <CodeIcon color="action" sx={{ mr: 1 }} />
+                      Compétences requises
+                    </Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                       {offre.competences.split(',').map((competence, index) => (
                         <Chip 
@@ -133,21 +154,33 @@ function ListeOffres() {
                           label={competence.trim()} 
                           color="secondary"
                           size="small"
-                          sx={{ mb: 0.5 }}
                         />
                       ))}
                     </Box>
-                  </TableCell>
-                  <TableCell>
-                    {offre.missions}
-                    
-                  </TableCell>
+                  </Box>
+                </CardContent>
+
+                <CardActions sx={{ justifyContent: 'flex-end', p: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
                   
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                   
+                    {offre.etat === "En cours" && (
+                      <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<CheckCircleIcon />}
+                        onClick={() => handleTerminer(offre.id)}
+                        size="small"
+                      >
+                        Soumettre
+                      </Button>
+                    )}
+                  </Box>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </div>
   );

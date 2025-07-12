@@ -13,10 +13,10 @@ const HeaderAndSidebar = () => {
       <div className="sidebar bg-white d-none d-lg-block" style={{ width: '280px', minHeight: '100vh', position: 'fixed', borderRight: '1px solid #eaeaea', boxShadow: '2px 0 10px rgba(185, 55, 55, 0.03)' }}>
         <div className="p-4" style={{ borderBottom: '1px solid #f0f0f0' }}>
           <Col md={5} className="d-none d-md-block">
-          <Image src="../logo1.png" alt="Illustration offre d'emploi" fluid style={{ borderRadius: '10px' }} />
+          <Image src="../logo1.png" alt="Illustration offre d'emploi" fluid style={{ borderRadius: '10px',marginLeft:'32px' }} />
         </Col>
           <h5 className="mb-0 text-primary">
-            <Link to="/Dashboardcandidat" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/Dashboardcandidat" style={{ textDecoration: 'none', color: 'inherit',fontSize:'25px' }}>
             <span>
               <span style={{ color: 'rgb(0, 125, 175)' }}>Sma</span>
               <span style={{ color: '#E63946' }}>rt</span>
@@ -28,35 +28,35 @@ const HeaderAndSidebar = () => {
               </Link>
           </h5>
         </div>
-       <ListGroup variant="flush" className="mt-3" style={{ fontSize: '1.1rem' }}>
-                 <ListGroup.Item as={Link} to="/Dashboardcandidat" action active className="border-0 ">
+       <ListGroup variant="flush" className="mt-3" style={{ fontSize: '20px' }}>
+                 <ListGroup.Item as={Link} to="/Dashboardcandidat" action active className="border-0 mb-3 ">
                    <i className="fas fa-tachometer-alt me-2"></i> Tableau de bord
                  </ListGroup.Item>
-                 <ListGroup.Item as={Link} to="/Listoffrecand" action className="border-0 text-dark hover-bg-light">
+                 <ListGroup.Item as={Link} to="/Listoffrecand" action className="border-0 mb-3 text-dark hover-bg-light">
                    <i className="fas fa-users me-2"></i> Consulter les offres d'emploi 
                  </ListGroup.Item>
-                 <ListGroup.Item as={Link} to="/CandidatSubmission" action className="border-0 text-dark hover-bg-light">
+                 <ListGroup.Item as={Link} to="/CandidatSubmission" action className="border-0 mb-3 text-dark hover-bg-light">
                    <i className="fas fa-file-alt me-2"></i> Candidater
                  </ListGroup.Item>
-                 <ListGroup.Item action className="border-0 text-dark hover-bg-light">
+                 <ListGroup.Item as={Link} to="/Messoumissions" className="border-0 mb-3 text-dark hover-bg-light">
                    <i className="fas fa-chart-line me-2"></i>Consulter les résultats des soumissions
                  </ListGroup.Item>
-                 <ListGroup.Item action className="border-0 text-dark hover-bg-light">
+                 <ListGroup.Item action className="border-0 mb-3 text-dark hover-bg-light">
                    <i className="fas fa-calendar-alt me-2"></i> Entretiens
                  </ListGroup.Item>
-                 <ListGroup.Item action className="border-0 text-dark hover-bg-light">
+                 <ListGroup.Item action className="border-0 mb-3 text-dark hover-bg-light">
                    <i className="fas fa-cog me-2"></i> Paramètres
                  </ListGroup.Item>
-                 <ListGroup.Item  href='https://www.whitecapetech.com/contact' action className="border-0 text-dark hover-bg-light">
+                 <ListGroup.Item  href='https://www.whitecapetech.com/contact' action className="border-0 mb-3 text-dark hover-bg-light">
                    <i className="fas fa-question-circle me-2"></i> Aide
                  </ListGroup.Item>
         </ListGroup>
       </div>
 
-      <Navbar expand="lg" className="fixed-top shadow-sm bg-white" style={{left: '280px', right: 0,borderBottom: '1px solid #eaeaea'}}>
+      <Navbar expand="lg" className="fixed-top shadow-sm bg-white" style={{ left: '280px', right: 0, fontSize:'20px', borderBottom: '1px solid #eaeaea' }}>
         <Container fluid>
           <Navbar.Brand href="#" className="fw-bold d-lg-none text-primary">
-            <i className="fas fa-brain me-2"></i>IntelliRecrut
+            <i className="fas fa-brain me-2"></i>SmartHireCape
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -67,25 +67,19 @@ const HeaderAndSidebar = () => {
               <Dropdown as={Nav.Item}>
                 <Dropdown.Toggle as={Nav.Link} className="text-dark">Soumissions</Dropdown.Toggle>
                 <Dropdown.Menu className="border-0 shadow-sm">
-                  <Dropdown.Item as={Link} to="">Toutes les soumissions</Dropdown.Item>
+                  <Dropdown.Item as={Link} to="/Messoumissions">Toutes les soumissions</Dropdown.Item>
                   <Dropdown.Item href="#">Catégories</Dropdown.Item>
                   <Dropdown.Item href="#">Archives</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
-            <Form className="d-flex me-3">
-              <Form.Control type="search" placeholder="Rechercher..." className="me-2 border-light" aria-label="Search" style={{ minWidth: '250px' }}/>
-              <Button variant="outline-primary">
-                <i className="fas fa-search"></i>
-              </Button>
-            </Form>
             <Nav>
-              <Dropdown align="end">
+              <Dropdown align="end" >
                 <Dropdown.Toggle as={Nav.Link} className="text-dark">
                   <i className="fas fa-user-circle me-1"></i>
                   <span className="d-none d-lg-inline">Candidat</span>
                 </Dropdown.Toggle>
-                <Dropdown.Menu className="dropdown-menu-end border-0 shadow-sm">
+                <Dropdown.Menu className="dropdown-menu-end border-0 shadow-sm" style={{fontSize:'18px'}}>
                   <Dropdown.Item as={Link} to="/Editprofilecand" className="text-dark">
                     <i className="fas fa-user me-2 text-primary"></i> Profil
                   </Dropdown.Item>
