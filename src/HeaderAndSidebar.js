@@ -78,18 +78,6 @@ const HeaderAndSidebar = () => {
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
-            <Form className="d-flex me-3">
-              <Form.Control
-                type="search"
-                placeholder="Rechercher..."
-                className="me-2 border-light"
-                aria-label="Search"
-                style={{ minWidth: '250px' }}
-              />
-              <Button variant="outline-primary">
-                <i className="fas fa-search"></i>
-              </Button>
-            </Form>
             <Nav>
               
               <Dropdown align="end">

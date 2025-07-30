@@ -19,6 +19,7 @@ import Editprofilecand from './Editprofilecand';
 import keycloak from './keycloak';
 import Preselection from './Preselection';
 import Messoumissions from './Messoumissions';
+import SoumissionOffrePage from './SoumissionOffrePage'
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/Dashboardcandidat" element={<Dashboardcandidat />} />
         <Route path="/CandidatSubmission" element={<CandidatSubmission />} />
+        <Route path="/SoumissionOffrePage" element={<SoumissionOffrePage />} />
         <Route path="/Publieroffre" element={<Publieroffre />} />
         <Route path="/Listoffre" element={<ListOffre />} />
         <Route path="/Listoffrecand" element={<Listoffrecand />} />

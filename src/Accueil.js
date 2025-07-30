@@ -38,7 +38,7 @@ function Accueil() {
         <div className="left">
           <h2>À propos de nous</h2>
           <p>
-            IntelliRecrut est une solution développée par Whitecape Technologies pour optimiser le recrutement.
+            SmartHireCape est une solution développée par Whitecape Technologies pour optimiser le recrutement.
             Nous utilisons l'intelligence artificielle pour améliorer la correspondance entre offres d'emploi et profils.
           </p>
         </div>

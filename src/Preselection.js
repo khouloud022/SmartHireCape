@@ -61,9 +61,7 @@ const Preselection = () => {
 
   return (
     <div className="preselection-container">
-      <HeaderAndSidebar />
-    
-      
+      <HeaderAndSidebar /> 
       <div className="preselection-content">
         <div className="dashboard-header">
             <br></br><br></br><br></br>
@@ -95,11 +93,7 @@ const Preselection = () => {
         )}
 
         <div className="action-section">
-          <button 
-            className={`analyse-button ${isAnalyzing ? 'loading' : ''}`} 
-            onClick={lancerAnalyse}
-            disabled={isAnalyzing}
-          >
+          <button className={`analyse-button ${isAnalyzing ? 'loading' : ''}`} onClick={lancerAnalyse} disabled={isAnalyzing} >
             {isAnalyzing ? (
               <>
                 <span className="spinner"></span>
@@ -191,7 +185,7 @@ const Preselection = () => {
                       <td>{c.telephone || '—'}</td>
                       <td>
                         <div className="competences">
-                          {c.competence.split(',').map((comp, i) => (
+                          {c.competence.split(' et ').map((comp, i) => (
                             <span key={i} className="competence-tag">{comp.trim()}</span>
                           ))}
                         </div>

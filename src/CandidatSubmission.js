@@ -1,9 +1,26 @@
 import React, { useEffect, useState } from "react";
 import HeaderAndSidebarcand from "./HeaderAndSidebarcand";
 import axios from "axios";
-import { Container, Typography, FormControl, InputLabel, Select, MenuItem, TextField, Button, Alert, Box, Paper, Grid, useTheme, useMediaQuery} from "@mui/material";
+import { 
+  Container, Typography, FormControl, InputLabel, Select, 
+  MenuItem, TextField, Button, Alert, Box, Paper, Grid, 
+  useTheme, useMediaQuery, Fade, Slide, Grow, Avatar,
+  InputAdornment, IconButton, CircularProgress
+} from "@mui/material";
+import { 
+  AttachFile, CheckCircle, Send, 
+  WorkOutline, PersonOutline, EmailOutlined,
+  PhoneOutlined, SchoolOutlined, DescriptionOutlined
+} from "@mui/icons-material";
+import { keyframes } from "@emotion/react";
 import './App.css';
 import keycloak from './keycloak';
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
 
 function SoumissionCandidature() {
   const theme = useTheme();
@@ -22,6 +39,9 @@ function SoumissionCandidature() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [candidatureExist, setCandidatureExist] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fileUploaded, setFileUploaded] = useState(false);
+
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_BASE_URL}/offres`)
       .then(response => setOffres(response.data))
@@ -34,11 +54,8 @@ function SoumissionCandidature() {
   useEffect(() => {
     if (keycloak.authenticated) {
       const email = keycloak.tokenParsed?.email;
-      console.log(email);
       const prenom = keycloak.tokenParsed?.given_name;
-      console.log(prenom);
       const nom = keycloak.tokenParsed?.family_name;
-      console.log(nom);
       setFormData(prev => ({
         ...prev,
         nomcomplet: `${prenom} ${nom}`,
@@ -46,7 +63,8 @@ function SoumissionCandidature() {
       }));
     }
   }, []);
- useEffect(() => {
+
+  useEffect(() => {
     if (formData.offreId && formData.email) {
       axios.get(`${process.env.REACT_APP_API_BASE_URL}/candidatures/exists`, {
         params: {
@@ -77,6 +95,8 @@ function SoumissionCandidature() {
 
   const handleFileChange = (e) => {
     setFormData(prev => ({ ...prev, cv: e.target.files[0] }));
+    setFileUploaded(true);
+    setTimeout(() => setFileUploaded(false), 2000);
   };
 
   const handleSubmit = async (e) => {
@@ -92,6 +112,8 @@ function SoumissionCandidature() {
       setErrorMessage("Tous les champs sont requis.");
       return;
     }
+
+    setIsSubmitting(true);
 
     const data = new FormData();
     data.append("offreId", offreId);
@@ -123,84 +145,306 @@ function SoumissionCandidature() {
     } catch (error) {
       console.error("Erreur lors de la soumission:", error);
       setErrorMessage("Une erreur est survenue lors de la soumission.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div style={{ backgroundColor: '#f5f7fa', minHeight: '100vh' }}>
+    <div style={{ 
+      backgroundColor: '#f8fafc', 
+      minHeight: '100vh',
+      backgroundImage: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%)'
+    }}>
       <HeaderAndSidebarcand />
 
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} md={6} order={isMobile ? 2 : 1}>
-            <Paper sx={{ p: 4, borderRadius: 3, background: 'white' }} elevation={0}>
-              <Typography variant="h4" align="center" fontWeight="bold" sx={{ color: theme.palette.primary.main, mb: 4 }}>
-                Postulez maintenant!
-              </Typography>
-
-              {successMessage && <Alert severity="success" sx={{ mb: 3 }}>{successMessage}</Alert>}
-              {errorMessage && <Alert severity="error" sx={{ mb: 3 }}>{errorMessage}</Alert>}
-
-              <form onSubmit={handleSubmit}>
-                <FormControl fullWidth margin="normal" sx={{ mb: 2 }}>
-                  <InputLabel>Offre d'emploi</InputLabel>
-                  <Select
-                    name="offreId"
-                    value={formData.offreId}
-                    onChange={handleChange}
-                    required
-                    sx={{ borderRadius: 2 }}
-                  >
-                    {offres.map((offre) => (
-                      <MenuItem key={offre.id} value={offre.id}>
-                        {offre.titre} - {offre.entreprise}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <TextField label="Nom complet" name="nomcomplet" value={formData.nomcomplet} onChange={handleChange} fullWidth margin="normal" required sx={{ mb: 2 }} />
-                <TextField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} fullWidth margin="normal" required sx={{ mb: 2 }} />
-                <TextField label="Téléphone" name="telephone" value={formData.telephone} onChange={handleChange} fullWidth margin="normal" required sx={{ mb: 2 }} />
-                <TextField label="Années d'expérience" name="experience" type="number" value={formData.experience} onChange={handleChange} fullWidth margin="normal" required sx={{ mb: 2 }} />
-                <TextField label="Compétences" name="competence" value={formData.competence} onChange={handleChange} placeholder="Ex: React, Java, Spring Boot" fullWidth margin="normal" required sx={{ mb: 2 }} />
-                <TextField label="Introduction générale" name="introduction" value={formData.introduction} onChange={handleChange} fullWidth margin="normal" multiline rows={3} required sx={{ mb: 2 }} />
-
-                <Box sx={{ mt: 3, mb: 3 }}>
-                  <Button variant="outlined" component="label" fullWidth sx={{ py: 1.5, borderRadius: 2 }}>
-                    Joindre votre CV
-                    <input type="file" hidden accept=".pdf,.doc,.docx" onChange={handleFileChange} required />
-                  </Button>
-                  {formData.cv && (
-                    <Typography variant="body2" sx={{ mt: 1 }}>
-                      Fichier sélectionné : {formData.cv.name}
-                    </Typography>
-                  )}
+      <Container maxWidth="lg" sx={{ py: 15 }}>
+        <Fade in timeout={800}>
+          <Grid container spacing={4} alignItems="center" justifyContent="center">
+            <Grid item xs={12} md={6} order={isMobile ? 2 : 1}>
+              <Paper sx={{ 
+                p: 4, 
+                borderRadius: 3, 
+                background: 'white',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.08)',
+                borderLeft: '5px solid ' + theme.palette.primary.main,
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 15px 35px rgba(0, 0, 0, 0.12)'
+                }
+              }} elevation={0}>
+                <Box textAlign="center" mb={4}>
+                  <Avatar sx={{ 
+                    bgcolor: theme.palette.primary.main, 
+                    width: 60, 
+                    height: 60,
+                    margin: '0 auto 16px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                  }}>
+                    <WorkOutline fontSize="large" />
+                  </Avatar>
+                  <Typography variant="h4" fontWeight="bold" sx={{ 
+                    color: theme.palette.primary.main, 
+                    mb: 1,
+                    background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}>
+                    Postulez maintenant
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Remplissez le formulaire pour soumettre votre candidature
+                  </Typography>
                 </Box>
 
-                <Box textAlign="center" mt={4}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    disabled={candidatureExist}
-                    sx={{
-                      px: 6, py: 1.5, borderRadius: 2, fontWeight: 'bold',
-                      '&:hover': { boxShadow: '0 6px 16px rgba(0, 0, 0, 0.15)' }
+                {successMessage && (
+                  <Grow in>
+                    <Alert 
+                      severity="success" 
+                      icon={<CheckCircle fontSize="inherit" />}
+                      sx={{ mb: 3, borderRadius: 2 }}
+                    >
+                      {successMessage}
+                    </Alert>
+                  </Grow>
+                )}
+                {errorMessage && (
+                  <Grow in>
+                    <Alert 
+                      severity="error" 
+                      sx={{ mb: 3, borderRadius: 2 }}
+                    >
+                      {errorMessage}
+                    </Alert>
+                  </Grow>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                  <FormControl fullWidth margin="normal" sx={{ mb: 3 }}>
+                    <InputLabel>Offre d'emploi</InputLabel>
+                    <Select
+                      name="offreId"
+                      value={formData.offreId}
+                      onChange={handleChange}
+                      required
+                      sx={{ borderRadius: 2 }}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <WorkOutline color="action" />
+                        </InputAdornment>
+                      }
+                    >
+                      {offres.map((offre) => (
+                        <MenuItem key={offre.id} value={offre.id}>
+                          {offre.titre} - {offre.entreprise}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <TextField 
+                    label="Nom complet" 
+                    name="nomcomplet" 
+                    value={formData.nomcomplet} 
+                    onChange={handleChange} 
+                    fullWidth 
+                    margin="normal" 
+                    required 
+                    sx={{ mb: 3 }} 
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PersonOutline color="action" />
+                        </InputAdornment>
+                      ),
                     }}
-                  >
-                    Soumettre ma candidature
-                  </Button>
-                </Box>
-              </form>
-            </Paper>
-          </Grid>
+                  />
+                  
+                  <TextField 
+                    label="Email" 
+                    name="email" 
+                    type="email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    fullWidth 
+                    margin="normal" 
+                    required 
+                    sx={{ mb: 3 }} 
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailOutlined color="action" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  
+                  <TextField 
+                    label="Téléphone" 
+                    name="telephone" 
+                    value={formData.telephone} 
+                    onChange={handleChange} 
+                    fullWidth 
+                    margin="normal" 
+                    required 
+                    sx={{ mb: 3 }} 
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PhoneOutlined color="action" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  
+                  <TextField 
+                    label="Années d'expérience" 
+                    name="experience" 
+                    type="number" 
+                    value={formData.experience} 
+                    onChange={handleChange} 
+                    fullWidth 
+                    margin="normal" 
+                    required 
+                    sx={{ mb: 3 }} 
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SchoolOutlined color="action" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  
+                  <TextField 
+                    label="Compétences" 
+                    name="competence" 
+                    value={formData.competence} 
+                    onChange={handleChange} 
+                    placeholder="Ex: React, Java, Spring Boot" 
+                    fullWidth 
+                    margin="normal" 
+                    required 
+                    sx={{ mb: 3 }} 
+                  />
+                  
+                  <TextField 
+                    label="Introduction générale" 
+                    name="introduction" 
+                    value={formData.introduction} 
+                    onChange={handleChange} 
+                    fullWidth 
+                    margin="normal" 
+                    multiline 
+                    rows={4} 
+                    required 
+                    sx={{ mb: 3 }} 
+                  />
 
-          <Grid item xs={12} md={6} order={isMobile ? 1 : 2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Box component="img" src="/candidature.png" alt="Candidature" sx={{ width: "100%", maxWidth: "500px", height: "auto" }} />
+                  <Box sx={{ mt: 3, mb: 4 }}>
+                    <Button 
+                      variant="outlined" 
+                      component="label" 
+                      fullWidth 
+                      sx={{ 
+                        py: 2, 
+                        borderRadius: 2,
+                        borderStyle: 'dashed',
+                        borderWidth: 2,
+                        transition: 'all 0.3s ease',
+                        animation: fileUploaded ? `${pulse} 1s ease` : 'none',
+                        '&:hover': {
+                          borderColor: theme.palette.primary.main,
+                          backgroundColor: 'rgba(25, 118, 210, 0.04)'
+                        }
+                      }}
+                      startIcon={<AttachFile />}
+                    >
+                      Joindre votre CV (PDF, DOC)
+                      <input type="file" hidden accept=".pdf,.doc,.docx" onChange={handleFileChange} required />
+                    </Button>
+                    {formData.cv && (
+                      <Box sx={{ 
+                        mt: 2, 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        padding: '8px 12px',
+                        backgroundColor: '#f5f5f5',
+                        borderRadius: 2
+                      }}>
+                        <DescriptionOutlined color="primary" sx={{ mr: 1 }} />
+                        <Typography variant="body2">
+                          {formData.cv.name}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box textAlign="center" mt={4}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      disabled={candidatureExist || isSubmitting}
+                      sx={{
+                        px: 6, 
+                        py: 1.5, 
+                        borderRadius: 2, 
+                        fontWeight: 'bold',
+                        fontSize: '1rem',
+                        textTransform: 'none',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                        '&:hover': { 
+                          boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+                          transform: 'translateY(-2px)'
+                        },
+                        minWidth: 220,
+                        height: 48
+                      }}
+                      startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <Send />}
+                    >
+                      {isSubmitting ? 'Envoi en cours...' : 'Soumettre ma candidature'}
+                    </Button>
+                  </Box>
+                </form>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12} md={6} order={isMobile ? 1 : 2}>
+              <Slide in direction="up" timeout={600}>
+                <Box sx={{ 
+                  position: 'relative',
+                  display: 'flex', 
+                  justifyContent: 'center', 
+                  alignItems: 'center',
+                  height: '100%'
+                }}>
+                  <Box component="img" 
+                    src="/candidature.png" 
+                    alt="Candidature" 
+                    sx={{ 
+                      width: "100%", 
+                      maxWidth: "600px", 
+                      height: "auto",
+                      filter: 'drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1))'
+                    }} 
+                  />
+                  <Box sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '20%',
+                    background: 'linear-gradient(to top, rgba(248, 250, 252, 1) 0%, rgba(248, 250, 252, 0) 100%)',
+                    zIndex: 1
+                  }} />
+                </Box>
+              </Slide>
+            </Grid>
           </Grid>
-        </Grid>
+        </Fade>
       </Container>
     </div>
   );

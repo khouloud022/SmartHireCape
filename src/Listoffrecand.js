@@ -4,20 +4,19 @@ import HeaderWithSidebar from "./HeaderAndSidebarcand";
 import { Container, Typography, Paper, Button, Chip, Box, IconButton,Grid,Card,CardContent,CardActions,Avatar, Divider} from "@mui/material";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import WorkIcon from '@mui/icons-material/Work';
 import BusinessIcon from '@mui/icons-material/Business';
 import EventIcon from '@mui/icons-material/Event';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CodeIcon from '@mui/icons-material/Code';
-
+import { useNavigate } from 'react-router-dom';
+import SoumissionOffrePage from "./SoumissionOffrePage";
 function ListeOffres() {
   const [offres, setOffres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_BASE_URL}/offres`)
       .then(response => {
@@ -165,11 +164,8 @@ function ListeOffres() {
                   
                    
                     {offre.etat === "En cours" && (
-                      <Button
-                        variant="contained"
-                        color="success"
-                        startIcon={<CheckCircleIcon />}
-                        onClick={() => handleTerminer(offre.id)}
+                      <Button variant="contained" color="success" startIcon={<CheckCircleIcon />}
+                        onClick={() => navigate('/SoumissionOffrePage')}
                         size="small"
                       >
                         Soumettre
